@@ -10,7 +10,7 @@ You don't need to know anything about Linux or HLDS to start a server. You just 
 ## Important Caveats
 
 - **Game Data Requirement**: This image includes the base Half-Life Dedicated Server (HLDS) with the `valve` mod for core assets. However, Counter-Strike 1.6 mod files (`cstrike` folder) are **not included** due to licensing. You must provide your own `cstrike` folder from a legitimate CS 1.6 client installation.
-- **How to Provide CS Data**: Copy the entire `cstrike` folder from your CS 1.6 game install into the `./gamedir/` directory. The Docker setup will mount and sync these files.
+- **How to Provide CS Data**: Copy the entire `cstrike` folder from your CS 1.6 game install into the `./gamedir_cs/` directory. The Docker setup will mount and sync these files.
 - **Licensing**: Ensure you own Counter-Strike 1.6 on Steam.
 
 ## Quick Start
