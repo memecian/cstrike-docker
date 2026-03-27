@@ -1,39 +1,39 @@
 
 ![Half-Life](/media/banner.jpg)
 
-# Half-Life Deathmatch Server as Docker image
+# Counter-Strike 1.6 Server as Docker image
 
-Probably the fastest and easiest way to set up an old-school Half-Life Deathmatch Dedicated Server (HLDS).
+An easy way to set up a Counter-Strike 1.6 Dedicated Server (CSDS) using Docker.
+Based on ["Probably the fastest and easiest way to set up an old-school Half-Life Deathmatch Dedicated Server"](https://github.com/spezifanta/hldm-docker) by spezifanta.
 You don't need to know anything about Linux or HLDS to start a server. You just need Docker and this image.
+
+## Important Caveats
+
+- **Game Data Requirement**: This image includes the base Half-Life Dedicated Server (HLDS) with the `valve` mod for core assets. However, Counter-Strike 1.6 mod files (`cstrike` folder) are **not included** due to licensing. You must provide your own `cstrike` folder from a legitimate CS 1.6 client installation.
+- **How to Provide CS Data**: Copy the entire `cstrike` folder from your CS 1.6 game install into the `./gamedir/` directory. The Docker setup will mount and sync these files.
+- **LAN Mode**: Runs in LAN mode by default. For internet play, modify `docker-compose.yml`.
+- **Licensing**: Ensure you own Counter-Strike 1.6 on Steam.
 
 ## Quick Start
 
 Start a new server by running:
 ```
-docker run -it --rm -d -p27015:27015 -p27015:27015/udp spezifanta/hldm
+docker run -it --rm -d -p27015:27015 -p27015:27015/udp memecian/cstrike
 ```
 
 Change the player slot size, map or `rcon_password` by running:
 ```
-docker run -it --rm -d --name hldm -p27015:27015 -p27015:27015/udp spezifanta/hldm +map crossfire +maxplayers 12 +rcon_password SECRET_PASSWORD
+docker run -it --rm -d --name cstrike -p27015:27015 -p27015:27015/udp memecian/cstrike +map de_dust +maxplayers 12 +rcon_password SECRET_PASSWORD
 ```
 
-> **Note:** Any [server config command](http://sr-team.clan.su/K_stat/hlcommandsfull.html) can be passed by using `+`. But it has to follow after the image name `spezifanta/hldm`.
+> **Note:** Any [server config command](http://sr-team.clan.su/K_stat/hlcommandsfull.html) can be passed using `+`.
 
-
-The following default maps are available:
- - boot_camp
- - bounce
- - crossfire
- - datacore
- - frenzy
- - gasworks
- - lambda_bunker
- - rapidcore
- - snark_pit
- - stalkyard
- - subtransit
- - undertow
+The following default maps are available (after providing cstrike data):
+ - de_dust
+ - cs_italy
+ - de_aztec
+ - cs_office
+ - etc. (standard CS maps)
 
 
 ## Advanced
@@ -48,7 +48,7 @@ mkdir gamedir && echo 'echo "Executing custom server.cfg"' > gamedir/server.cfg
 Add your settings to the `server.cfg` and mount the directory as volume by running:
 
 ```
-docker run -it --rm -d -p27015:27015 -p27015:27015/udp -v gamedir:/tmp/gamedir spezifanta/hldm
+docker run -it --rm -d -p27015:27015 -p27015:27015/udp -v gamedir:/tmp/gamedir memecian/cstrike
 ```
 
 You should see `Executing custom server.cfg` in the server log when starting the server.
@@ -56,8 +56,8 @@ You should see `Executing custom server.cfg` in the server log when starting the
 
 ## About this Docker image
 
-This image uses the latest version of [Half-life](https://store.steampowered.com/app/70/HalfLife), which can be installed via [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD)
-and patched versions of:
+This image uses the latest version of [Half-Life Dedicated Server](https://developer.valvesoftware.com/wiki/HLDS) (HLDS, appid 90) with the `cstrike` mod, installed via [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD).
+It includes patched versions of:
 
  - [Metamod v1.20](http://metamod.org/)
  - [Stripper2 v1.0.0](http://hpb-bot.bots-united.com/stripper2.html)
@@ -69,30 +69,13 @@ and patched versions of:
 
 ### Speed
 
-Setting up a new HLDS from scratch can be a bit tedious because since a few years now SteamCMD will fail to download all the files on the first try.
-The general workaround is just by retrying. And retrying, and retrying, and... :gun:. A more promising workaround is replacing certain files and forcing a redownload. But even this can fail sometimes.
-Anyway, just searching for the download link of SteamCMD takes longer than just copying & pasting the Docker `run` command from above (yes, this assumes you have Docker installed. But why haven't you already?).
-
-Also, there are a couple of server commands, which need tweaking, and plugins, that need to be installed and configured.
-
-
-So this image saves a lot of time.
-
-
-### Sustainability
-
-Half-Life is more than 20 years old now. Many major community pages and tutorials are offline. I am not saying, that Half-Life will die, but the sites with the step by step instructions, workarounds and plugins might not be around for ever.
-Furthermore not everybody, who likes playing Half-Life and wants to set up a server, is a Linux geek. You don't need to know anything about Linux or HLDS to start a server by using this image.
-That's why I build this image.
-
-I want HLDM to live forever!
-
+Setting up a CS 1.6 server from scratch requires HLDS and mod files. This image handles the installation and configuration automatically, saving time on retries and setups.
 
 ### Other reasons
 
-- In most cases, you have to wrap `hlds_run` anyway by using something like `screen`, `tmux`, `wmux` or `systemd`, because the server will exit as soon as you close your terminal. So why not add Docker to that list.
-- Decoupling. To set up a HLDS you need to install 32bit libraries. On a 64bit system, this is somewhat less than perfect. On a company PC, you might need extra permissions to do so. With Docker on the other hand... I hope you get my point ;).
-- Scalability.
+- Servers need background management; Docker simplifies this.
+- Decoupling: Avoids 32-bit lib installs on 64-bit systems.
+- Scalability and portability.
 
 
 ## License
@@ -101,7 +84,7 @@ MIT
 
 ## Test Server
 
-Connect to `steamcalculator.com:27015` to give it a try.
+Connect to `redspecced.me:27016` to give it a try.
 
 <a href="https://www.youtube.com/watch?v=y15dfBZSx9Q" target="_blank">
 <img src="/media/github-video.jpg" alt="HLDM Docker"/>
