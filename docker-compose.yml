@@ -1,16 +1,16 @@
 version: '3.7'
 
 services:
-  hldm:
+  cstrike:
     build: docker
-    image: spezifanta/hldm
+    image: memecian/cstrike
     # ports:
     # default port for player connection.
     #   - '27015:27015'
     #   - '27015:27015/udp'
-    # Port for VAC and master server queries. 
+    # Port for VAC and master server queries.
     #   - '26900:26900/udp'
     volumes:
-      - './gamedir:/tmp/gamedir'
-    command: +maxplayers 12 +map crossfire +rcon_password "supersecret" +log on +logaddress 0.0.0.0 27500 +sys_ticrate 1000 -pingboost 2
+      - './gamedir_cs:/tmp/gamedir'
+    command: -game cstrike +ip 0.0.0.0 +port 27016 +maxplayers 12 +map cs_italy +rcon_password "supersecret" +log on +logaddress 0.0.0.0 27500 +sys_ticrate 1000 -pingboost 2
     network_mode: 'host'

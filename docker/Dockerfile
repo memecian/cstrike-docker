@@ -24,21 +24,21 @@ RUN dpkg --add-architecture i386 \
 
 USER steam
 WORKDIR /opt/steam
-COPY ./hldm.install /opt/steam
+COPY ./cstrike.install /opt/steam
 
 # Download SteamCMD, install HLDM, fix steamclient.so and reduce image size.
 RUN curl -sL --fail https://media.steampowered.com/client/installer/steamcmd_linux.tar.gz | tar xzvf - \
     && ldd /opt/steam/linux32/steamcmd \
-    && ./steamcmd.sh +runscript hldm.install \
-    && rm -fr /opt/steam/hldm/cstrike /opt/steam/hldm/siteserverui /opt/steam/hldm/linux64 \
+    && ./steamcmd.sh +runscript cstrike.install \
+    && rm -fr /opt/steam/cstrike/siteserverui /opt/steam/cstrike/linux64 \
     && mkdir -p $HOME/.steam \
     && ln -s /opt/steam/linux32 $HOME/.steam/sdk32 \
-    && echo 70 > /opt/steam/hldm/steam_appid.txt
+    && echo 10 > /opt/steam/cstrike/steam_appid.txt
 
-WORKDIR /opt/steam/hldm
+WORKDIR /opt/steam/cstrike
 
 # Copy configs, Metamod, Stripper2 and AMX.
-COPY --chown=steam:steam gamedir valve/
+COPY --chown=steam:steam gamedir/ ./
 COPY --chown=steam:steam ./entrypoint.sh ./entrypoint.sh
 
 # Expose ports
@@ -48,9 +48,9 @@ EXPOSE 27015 27015/udp
 ENTRYPOINT ["./entrypoint.sh", "-timeout 3"]
 
 # Default start parameters.
-CMD ["+maxplayers 12", "+map crossfire"]
+CMD ["+maxplayers 12", "+map cs_italy"]
 
 # Labels
 LABEL vendor=steamcalculator.com \
-    hldm.docker.version="${VERSION}" \
-    hldm.docker.release-date="${RELEASE_DATE}"
+    cstrike.docker.version="${VERSION}" \
+    cstrike.docker.release-date="${RELEASE_DATE}"

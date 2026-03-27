@@ -1,1 +1,8 @@
-crossfire
+de_dust
+cs_italy
+de_inferno
+cs_office
+de_nuke
+cs_assault
+de_dust2
+cs_militia
