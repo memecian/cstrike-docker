@@ -85,7 +85,3 @@ MIT
 ## Test Server
 
 Connect to `redspecced.me:27016` to give it a try.
-
-<a href="https://www.youtube.com/watch?v=y15dfBZSx9Q" target="_blank">
-<img src="/media/github-video.jpg" alt="HLDM Docker"/>
-</a>
